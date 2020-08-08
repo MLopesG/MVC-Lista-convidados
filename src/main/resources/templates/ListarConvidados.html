@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convidados</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <main>
+        <header>
+            <div class="container">    
+                <div class="logo">
+                    <h1>Convidados</h1>
+                </div>
+            </div>
+        </header>
+
+        <section class="container">
+            <div class="titulo">
+                <h1>Lista de convidados</h1>
+            </div>
+            <div class="box">
+                <div class="cadastrar">
+                    <form th:object="${convidado}" th:action="@{/convidado}"  method="post">
+                        <ul th:if="${#fields.hasErrors()}">
+                            <li th:each="error : ${#fields.errors('global')}" th:text="${error}">error</li>
+                          </ul>
+                        <div class="input-container" th:if="${id > 0}">
+                            <input type="text" placeholder="Código" name="id" th:field="*{id}" readonly>
+                        </div>
+                        <div class="input-container">
+                            <input type="text" placeholder="Nome Convidado" name="nome" th:field="*{nome}" >
+                            <label  th:errors="*{nome}">Name Error</label>
+                        </div>
+                        <div class="input-container">
+                            <input type="number" placeholder="Quantidade de acompanhante" th:field="*{quantidadeAcompanhantes}" name="quantidadeAcompanhantes">
+                        </div>
+                        <div class="input-container">
+                            <input type="submit" value="Salvar">
+                        </div>
+                    </form>
+                </div>
+                <form:errors path="nome" />
+                <div th:object="${convidado}" class="responsive">
+                    <table th:if="${id <= 0}">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nome</th>
+                                <th>Acompanhantes</th>
+                                <th >Ações</th>
+                            </tr>    
+                        </thead>
+                        <tbody>
+                            <tr th:each="convidado : ${convidados}">
+                                <td th:text="${convidado.id}"></td>
+                                <td th:text="${convidado.nome}"></td>
+                                <td th:text="${convidado.quantidadeAcompanhantes} + ' - Pessoa(s)'"</td>
+                                <td>
+                                    <a th:href="@{'/convidado/edit/' + ${convidado.id}}">Alterar</a>
+                                    <a th:href="@{'/convidado/delete/' + ${convidado.id}}">Excluir</a>
+                                </td>
+                            </tr>                            
+                        </tbody>
+                        <footer>
+                            <tr>
+                                <td><b th:text="'Total de convidados: ' + ${total > 0 ? total : 0}"></b></td>
+                            </tr>
+                        </footer>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
